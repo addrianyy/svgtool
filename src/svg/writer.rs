@@ -1,5 +1,5 @@
 use super::{Vector, Shape, ShapeStyle, ShapeTransform};
-use super::{SVG, Transform, TextAnchor, Color};
+use super::{SVG, Transform, TextAnchor, DominantBaseline, FontWeight, Color};
 use super::path::{Path, CommandType, Command, CombinedCommand};
 use std::fmt;
 
@@ -65,6 +65,41 @@ fn write_styled_transformed(f: &mut fmt::Formatter, shape: &Shape,
     Ok(())
 }
 
+impl fmt::Display for FontWeight {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let name = match self {
+            FontWeight::Normal  => "normal",
+            FontWeight::Bold    => "bold",
+        };
+
+        write!(f, "{}", name)
+    }
+}
+
+impl fmt::Display for TextAnchor {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let name = match self {
+            TextAnchor::Start  => "start",
+            TextAnchor::Middle => "middle",
+            TextAnchor::End    => "end",
+        };
+
+        write!(f, "{}", name)
+    }
+}
+
+impl fmt::Display for DominantBaseline {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let name = match self {
+            DominantBaseline::Baseline => "baseline",
+            DominantBaseline::Middle   => "middle",
+            DominantBaseline::Hanging  => "hanging",
+        };
+
+        write!(f, "{}", name)
+    }
+}
+
 impl fmt::Display for ShapeStyle {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         if !self.has_style() {
@@ -103,18 +138,21 @@ impl fmt::Display for ShapeStyle {
         if let Some(font_family) = &self.font_family {
             write!(f, "font-family:{};", font_family)?;
         }
+
         if let Some(font_size) = &self.font_size {
             write!(f, "font-size:{};", font_size)?;
         }
 
         if let Some(text_anchor) = &self.text_anchor {
-            let as_text = match text_anchor {
-                TextAnchor::Start    => "start",
-                TextAnchor::Middle   => "middle",
-                TextAnchor::End      => "end",
-            };
+            write!(f, "text-anchor:{};", text_anchor)?;
+        }
 
-            write!(f, "text-anchor:{};", as_text)?;
+        if let Some(dominant_baseline) = &self.dominant_baseline {
+            write!(f, "dominant-baseline:{};", dominant_baseline)?;
+        }
+
+        if let Some(font_weight) = &self.font_weight {
+            write!(f, "font-weight:{};", font_weight)?;
         }
 
         write!(f, r#"""#)

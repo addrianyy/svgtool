@@ -24,22 +24,37 @@ enum Color {
 }
 
 #[derive(Clone)]
+pub enum FontWeight {
+    Normal,
+    Bold,
+}
+
+#[derive(Clone)]
 pub enum TextAnchor {
     Start,
     Middle,
     End,
 }
 
+#[derive(Clone)]
+pub enum DominantBaseline {
+    Baseline,
+    Middle,
+    Hanging,
+}
+
 #[derive(Clone, Default)]
 pub struct ShapeStyle {
-    stroke:         Option<Color>,
-    fill:           Option<Color>,
-    fill_opacity:   Option<f32>,
-    stroke_opacity: Option<f32>,
-    stroke_width:   Option<f32>,
-    font_size:      Option<u32>,
-    font_family:    Option<&'static str>,
-    text_anchor:    Option<TextAnchor>,
+    stroke:             Option<Color>,
+    fill:               Option<Color>,
+    fill_opacity:       Option<f32>,
+    stroke_opacity:     Option<f32>,
+    stroke_width:       Option<f32>,
+    font_size:          Option<u32>,
+    font_family:        Option<&'static str>,
+    text_anchor:        Option<TextAnchor>,
+    dominant_baseline:  Option<DominantBaseline>,
+    font_weight:        Option<FontWeight>,
 }
 
 impl ShapeStyle {
@@ -51,7 +66,8 @@ impl ShapeStyle {
         self.stroke_width.is_some()   ||
         self.font_size.is_some()      ||
         self.font_family.is_some()    ||
-        self.text_anchor.is_some()
+        self.text_anchor.is_some()    ||
+        self.dominant_baseline.is_some()
     }
 }
 
@@ -166,6 +182,18 @@ impl Shape {
     pub fn text_anchor(self, text_anchor: TextAnchor) -> Self {
         self.style_transform(|style, _transform| {
             style.text_anchor = Some(text_anchor);
+        })
+    }
+
+    pub fn dominant_baseline(self, dominant_baseline: DominantBaseline) -> Self {
+        self.style_transform(|style, _transform| {
+            style.dominant_baseline = Some(dominant_baseline);
+        })
+    }
+
+    pub fn font_weight(self, font_weight: FontWeight) -> Self {
+        self.style_transform(|style, _transform| {
+            style.font_weight = Some(font_weight);
         })
     }
 
