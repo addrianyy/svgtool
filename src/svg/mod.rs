@@ -5,18 +5,16 @@ mod path;
 pub mod prelude;
 
 use std::rc::Rc;
-
 pub use path::{CommandType::{Absolute, Relative}, Path};
-
 
 pub type Vector = (f32, f32);
 
 #[derive(Clone)]
 enum Transform {
-    Translation((f32, f32)),
+    Translation(Vector),
     Rotation(f32),
-    RotationAroundPoint((f32, f32), f32),
-    Scale((f32, f32)),
+    RotationAroundPoint(Vector, f32),
+    Scale(Vector),
 }
 
 #[derive(Clone)]
@@ -64,14 +62,14 @@ pub struct ShapeTransform {
 
 #[derive(Clone)]
 pub enum Shape {
-    Rect((f32, f32), (f32, f32)),
-    RoundRect((f32, f32), (f32, f32), (f32, f32)),
-    Circle((f32, f32), f32),
-    Ellipse((f32, f32), (f32, f32)),
-    Line((f32, f32), (f32, f32)),
-    Polyline(Vec<(f32, f32)>),
-    Polygon(Vec<(f32, f32)>),
-    Text((f32, f32), String),
+    Rect(Vector, Vector),
+    RoundRect(Vector, Vector, Vector),
+    Circle(Vector, f32),
+    Ellipse(Vector, Vector),
+    Line(Vector, Vector),
+    Polyline(Vec<Vector>),
+    Polygon(Vec<Vector>),
+    Text(Vector, String),
     Complex(Vec<Shape>),
     Ref(Rc<Shape>),
     Path(Rc<Path>),
@@ -95,20 +93,20 @@ impl Shape {
         })
     }
 
-    pub fn translate(self, (x, y): (f32, f32)) -> Self {
-        self.add_transform(Transform::Translation((x, y)))
+    pub fn translate(self, translation: Vector) -> Self {
+        self.add_transform(Transform::Translation(translation))
     }
 
-    pub fn rotate_around_point(self, (x, y): (f32, f32), angle: f32) -> Self {
-        self.add_transform(Transform::RotationAroundPoint((x, y), angle))
+    pub fn rotate_around_point(self, point: Vector, angle: f32) -> Self {
+        self.add_transform(Transform::RotationAroundPoint(point, angle))
     }
 
     pub fn rotate(self, angle: f32) -> Self {
         self.add_transform(Transform::Rotation(angle))
     }
 
-    pub fn scale(self, (x, y): (f32, f32)) -> Self {
-        self.add_transform(Transform::Scale((x, y)))
+    pub fn scale(self, scale: Vector) -> Self {
+        self.add_transform(Transform::Scale(scale))
     }
 
     pub fn stroke(self, (r, g, b): (u8, u8, u8)) -> Self {

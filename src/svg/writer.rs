@@ -1,10 +1,9 @@
-use super::{Shape, ShapeStyle, ShapeTransform};
+use super::{Vector, Shape, ShapeStyle, ShapeTransform};
 use super::{SVG, Transform, TextAnchor, Color};
 use super::path::{Path, CommandType, Command, CombinedCommand};
-
 use std::fmt;
 
-fn write_text(f: &mut fmt::Formatter, (x, y): (f32, f32), text: &str) -> fmt::Result {
+fn write_text(f: &mut fmt::Formatter, (x, y): Vector, text: &str) -> fmt::Result {
     let write_escaped_string = |f: &mut fmt::Formatter, text: &str| -> fmt::Result {
         for ch in text.chars() {
             match ch {
@@ -25,7 +24,7 @@ fn write_text(f: &mut fmt::Formatter, (x, y): (f32, f32), text: &str) -> fmt::Re
     writeln!(f, "</text>")
 }
 
-fn write_poly(f: &mut fmt::Formatter, is_polyline: bool, points: &[(f32, f32)]) -> fmt::Result {
+fn write_poly(f: &mut fmt::Formatter, is_polyline: bool, points: &[Vector]) -> fmt::Result {
     if !points.is_empty() {
         if is_polyline {
             write!(f, r#"<polyline points=""#)?
@@ -33,8 +32,8 @@ fn write_poly(f: &mut fmt::Formatter, is_polyline: bool, points: &[(f32, f32)]) 
             write!(f, r#"<polygon points=""#)?
         };
 
-        for (idx, point) in points.iter().enumerate() {
-            write!(f, "{},{}", point.0, point.1)?;
+        for (idx, (x, y)) in points.iter().enumerate() {
+            write!(f, "{},{}", x, y)?;
 
             if idx + 1 != points.len() {
                 write!(f, " ")?;

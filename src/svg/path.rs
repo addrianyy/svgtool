@@ -1,6 +1,5 @@
 use std::rc::Rc;
-
-use super::Shape;
+use super::{Shape, Vector};
 
 pub(super) struct CombinedCommand {
     pub command_type: CommandType,
@@ -13,12 +12,12 @@ pub enum CommandType {
 }
 
 pub(super) enum Command {
-    MoveTo((f32, f32)),
-    LineTo((f32, f32)),
-    QuadCurveTo((f32, f32), (f32, f32)),
-    CubicCurveTo((f32, f32), (f32, f32), (f32, f32)),
-    SmoothQuadCurveTo((f32, f32)),
-    SmoothCubicCurveTo((f32, f32), (f32, f32)),
+    MoveTo(Vector),
+    LineTo(Vector),
+    QuadCurveTo(Vector, Vector),
+    CubicCurveTo(Vector, Vector, Vector),
+    SmoothQuadCurveTo(Vector),
+    SmoothCubicCurveTo(Vector, Vector),
     ClosePath,
 }
 
@@ -42,31 +41,29 @@ impl Path {
         }
     }
 
-    pub fn move_to(self, typ: CommandType, (x, y): (f32, f32)) -> Self {
-        self.add(typ, Command::MoveTo((x, y)))
+    pub fn move_to(self, typ: CommandType, pos: Vector) -> Self {
+        self.add(typ, Command::MoveTo(pos))
     }
 
-    pub fn line_to(self, typ: CommandType, (x, y): (f32, f32)) -> Self {
-        self.add(typ, Command::LineTo((x, y)))
+    pub fn line_to(self, typ: CommandType, pos: Vector) -> Self {
+        self.add(typ, Command::LineTo(pos))
     }
 
-    pub fn quad_curve_to(self, typ: CommandType, (x, y): (f32, f32), 
-            (x1, y1): (f32, f32)) -> Self {
-        self.add(typ, Command::QuadCurveTo((x, y), (x1, y1)))
+    pub fn quad_curve_to(self, typ: CommandType, pos: Vector, ctrl: Vector) -> Self {
+        self.add(typ, Command::QuadCurveTo(pos, ctrl))
     }
 
-    pub fn cubic_curve_to(self, typ: CommandType, (x, y): (f32, f32), 
-            (x1, y1): (f32, f32), (x2, y2): (f32, f32)) -> Self {
-        self.add(typ, Command::CubicCurveTo((x, y), (x1, y1), (x2, y2)))
+    pub fn cubic_curve_to(self, typ: CommandType, pos: Vector, ctrl1: Vector, ctrl2: Vector) 
+            -> Self {
+        self.add(typ, Command::CubicCurveTo(pos, ctrl1, ctrl2))
     }
 
-    pub fn cont_quad_curve_to(self, typ: CommandType, (x, y): (f32, f32)) -> Self {
-        self.add(typ, Command::SmoothQuadCurveTo((x, y)))
+    pub fn cont_quad_curve_to(self, typ: CommandType, pos: Vector) -> Self {
+        self.add(typ, Command::SmoothQuadCurveTo(pos))
     }
 
-    pub fn cont_cubic_curve_to(self, typ: CommandType, 
-            (x, y): (f32, f32), (x1, y1): (f32, f32)) -> Self {
-        self.add(typ, Command::SmoothCubicCurveTo((x, y), (x1, y1)))
+    pub fn cont_cubic_curve_to(self, typ: CommandType, pos: Vector, ctrl: Vector) -> Self {
+        self.add(typ, Command::SmoothCubicCurveTo(pos, ctrl))
     }
 
     pub fn close(self) -> Self {

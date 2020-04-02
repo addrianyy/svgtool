@@ -1,1 +1,1 @@
-pub use super::{SVG, Shape, Path, Absolute, Relative};
+pub use super::{SVG, Vector, Shape, Path, Absolute, Relative};
