@@ -67,6 +67,7 @@ impl ShapeStyle {
         self.font_size.is_some()      ||
         self.font_family.is_some()    ||
         self.text_anchor.is_some()    ||
+        self.font_weight.is_some()    ||
         self.dominant_baseline.is_some()
     }
 }
