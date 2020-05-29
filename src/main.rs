@@ -18,54 +18,9 @@ fn main() {
         triangle
             .scale((400.0, 400.0))
             .translate((800.0, 800.0))
-            .fill((255, 0, 0))
+            .fill((0, 155, 255))
     );
     
-    /*
-    svg.add(
-        Shape::Line(0.0, 0.0, 100.0, 200.0)
-            .stroke((0, 0, 255))
-            .stroke_width(5.0)
-            .stroke_opacity(0.3)
-    );
-
-    svg.add(
-        Shape::RoundRect(100.0, 100.0, 500.0, 400.0, 50.0, 50.0)
-            .fill((0, 255, 0))
-    );
-
-    svg.add(
-        Shape::Text(0.0, 0.0, "Hello world >>> &&XD".to_string())
-            .font_size(80)
-            .font_family("Arial")
-            .text_anchor(svg::TextAnchor::Middle)
-            .rotate(90.0)
-            .translate(400.0, 400.0)
-    );
-    */
-
-    //let mut path = Path::new();
-    //path.move_to(Absolute, 200.0, 300.0);
-    //path.line_to(Relative, 100.0, 100.0);
-
-    /*
-    path.move_to(Absolute, 200.0, 200.0);
-    path.line_to(Relative, -100.0, 0.0);
-    path.line_to(Relative, 0.0, -100.0);
-
-    path.move_to(Absolute, 200.0, 200.0);
-    path.line_to(Relative, 100.0, 0.0);
-    path.line_to(Relative, 0.0, 100.0);
-
-    path.move_to(Absolute, 200.0, 200.0);
-    path.line_to(Relative, 0.0, -100.0);
-    path.line_to(Relative, 100.0, 0.0);
-
-    path.move_to(Absolute, 200.0, 200.0);
-    path.line_to(Relative, 0.0, 100.0);
-    path.line_to(Relative, -100.0, 0.0);
-    */
-
     let path = Path::new()
         .move_to(Absolute, (500.0, 500.0))
         .quad_curve_to(Relative, (1000.0, 0.0), (500.0, 400.0))
